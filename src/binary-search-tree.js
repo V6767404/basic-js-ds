@@ -76,8 +76,42 @@ class BinarySearchTree {
   }
 
   remove(data) {
-    throw new NotImplementedError("Not implemented");
-    // remove line with error and write your code here
+    this.rootNode = this.removeNode(this.rootNode, data);
+  }
+
+  removeNode(i, data) {
+    if (i === null) {
+      return null;
+    }
+    if (data === i.data) {
+      if (i.left === null && i.right === null) {
+        return null;
+      }
+      if (i.left === null) {
+        return i.right;
+      }
+      if (i.right === null) {
+        return i.left;
+      }
+      const tempNode = this.getMinNode(i.right);
+      i.data = tempNode.data;
+      i.right = this.removeNode(i.right, tempNode.data);
+      return i;
+    } else if (data < i.data) {
+      i.left = this.removeNode(i.left, data);
+      return i;
+    } else {
+      i.right = this.removeNode(i.right, data);
+      return i;
+    }
+  }
+
+  getMinNode(i) {
+    let cN = i;
+    while (cN && cN.left !== null) {
+      cN = cN.left;
+    }
+    return cN;
   }
 
   min() {
@@ -113,6 +147,17 @@ class BinarySearchTree {
   }
 }
 
+// const tree = new BinarySearchTree();
+// tree.add(9);
+// tree.add(14);
+// tree.add(54);
+// tree.add(2);
+// tree.add(6);
+// tree.add(8);
+// tree.add(31);
+// tree.add(1);
+// console.log(tree.find(7))
+
 const tree = new BinarySearchTree();
 tree.add(1);
 tree.add(2);
@@ -124,9 +169,9 @@ console.log(tree.root().data);
 console.log(tree.has(5)); // => true
 console.log(tree.min()); //=> 1
 console.log(tree.max()); //=> 5
-// tree.remove(5);
-// tree.has(5) // => false
-// tree.max() => 4
+tree.remove(5);
+tree.has(5) // => false
+tree.max() //=> 4
 
 module.exports = {
   BinarySearchTree,
